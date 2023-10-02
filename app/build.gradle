@@ -3,6 +3,10 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+def apikeyPropertiesFile = rootProject.file("apikeys.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 android {
     namespace 'com.example.birdy'
     compileSdk 33
@@ -13,6 +17,14 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
+
+        buildFeatures {
+            viewBinding = true
+        }
+
+        buildConfigField("String", "EBIRD_API_KEY", apikeyProperties['EBIRD_API_KEY'])
+        buildConfigField("String", "MAPS_API_KEY", apikeyProperties['MAPS_API_KEY'])
+        manifestPlaceholders = [MAPS_API_KEY: "${apikeyProperties['MAPS_API_KEY']}"]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

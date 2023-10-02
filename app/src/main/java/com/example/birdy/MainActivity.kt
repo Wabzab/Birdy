@@ -14,6 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.view.MenuItem;
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
+import com.example.birdy.databinding.ActivityMainBinding
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -69,9 +70,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // https://www.geeksforgeeks.org/how-to-get-current-location-in-android/
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest().apply {
-            interval = TimeUnit.SECONDS.toMillis(15)
-            fastestInterval = TimeUnit.SECONDS.toMillis(5)
-            maxWaitTime = TimeUnit.SECONDS.toMillis(30)
+            interval = TimeUnit.SECONDS.toMillis(1)
+            fastestInterval = TimeUnit.SECONDS.toMillis(1)
+            maxWaitTime = TimeUnit.SECONDS.toMillis(1)
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         locationCallback = object: LocationCallback() {
@@ -107,22 +108,37 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Load anything onto the map when it is ready like applying map markers
     }
 
+    @SuppressLint("MissingPermission")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 0) {
+            if (grantResults.size > 0 && (grantResults[0] == PackageManager.PERMISSION_GRANTED ||
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
+                fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
+            }
+        }
+    }
+
     private fun isLocationPermissionGranted(): Boolean {
         return if (ActivityCompat.checkSelfPermission(
                 this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                 this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
                 ),
-                1
+                0
             )
             false
         } else {
