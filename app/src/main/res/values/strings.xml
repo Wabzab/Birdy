@@ -2,6 +2,10 @@
     <string name="app_name">Birdy</string>
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Shared Preference Keys -->
+    <string name="default_pref_key">default_preferences</string>
+    <string name="saved_lat_key">pref_lat</string>
+    <string name="saved_lng_key">pref_lng</string>
+    <string name="saved_dist_key">pref_dist</string>
 </resources>
