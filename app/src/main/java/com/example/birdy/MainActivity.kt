@@ -75,7 +75,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         map = googleMap
         // Load anything onto the map when it is ready like applying map markers\
         // Get hotspots from EBird API 2.0 and add them as markers on the map
-        val hotspots = async { Birdy.getHotspots(this) }
+        //val hotspots = async { Birdy.getHotspots(this) }\
+        MapHandler.map = map
+        MapHandler.loadHotspots(this)
     }
 
     @SuppressLint("MissingPermission")

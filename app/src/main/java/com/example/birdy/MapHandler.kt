@@ -3,26 +3,17 @@ package com.example.birdy
 import android.app.Activity
 import android.util.Log
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
 import kotlin.concurrent.thread
 
-/*
-The interface for the application. The app needs to be able to display bird hotspots
-that are within a certain radius around the user. It needs to display these hotspots
-on a map and allow the user to select/navigate to them easily. The map needs to show
-the route in the visual format.
- */
+object MapHandler {
 
-interface IBirdy {
-    fun getHotspots(activity: Activity): List<Hotspot>
+    lateinit var map: GoogleMap
 
-    fun getObservations()
-
-    fun saveObservation()
-}
-
-object Birdy : IBirdy {
-    override fun getHotspots(activity: Activity): List<Hotspot> {
+    fun loadHotspots(activity: Activity) {
         thread {
             Log.d("HOTSPOT", "Hotspot thread started.")
             val prefs = getDefaultSharedPreferences(activity)
@@ -41,29 +32,30 @@ object Birdy : IBirdy {
                 Log.d("HOTSPOT", "$e")
                 return@thread
             }
-            activity.runOnUiThread { consumeHotspotJson(hotspotJson) }
+            activity.runOnUiThread { readHotspotJson(hotspotJson) }
         }
     }
 
-    private fun consumeHotspotJson(hotspotJson: String?) {
+    private fun readHotspotJson(hotspotJson: String?) {
         Log.d("HOTSPOT", "Reading hotspot json.")
-        if (hotspotJson == null) {
-            return
-        }
         val gson = Gson()
         val hotspotData: Array<Hotspot> = gson.fromJson(hotspotJson, Array<Hotspot>::class.java)
-        Log.d("HOTSPOT", "${hotspotData.size}")
-        for(hotspot in hotspotData) {
-            Log.d("HOTSPOTS", "$hotspot")
+        createHotspotMarkers(hotspotData)
+    }
+
+    private fun createHotspotMarkers(hotspots: Array<Hotspot>) {
+        for (hotspot in hotspots) {
+            Log.d("MAP", "${hotspot.locName}")
+            val lat = hotspot.lat
+            val lng = hotspot.lng
+            if (lat != null && lng != null) {
+                val pos = LatLng(lat, lng)
+                map.addMarker(MarkerOptions()
+                    .position(pos)
+                    .title(hotspot.locName)
+                )
+            }
+
         }
     }
-
-    override fun getObservations() {
-        TODO("Not yet implemented")
-    }
-
-    override fun saveObservation() {
-        TODO("Not yet implemented")
-    }
-
 }
