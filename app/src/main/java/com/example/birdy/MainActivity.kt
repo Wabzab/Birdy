@@ -37,8 +37,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var navigationView: NavigationView
     private lateinit var map: GoogleMap
 
-    private lateinit var btnRegister: Button
+    private lateinit var btnSaveSighting: Button
     private lateinit var btnLogin: Button
+    private lateinit var btnGetSighting: Button
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
@@ -71,7 +72,27 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        btnRegister = findViewById(R.id.btn_register)
+        btnSaveSighting = findViewById(R.id.btn_save_sighting)
+        btnSaveSighting.setOnClickListener {
+            thread {
+                Looper.prepare()
+                val sightingDAO = SightingDAO(this)
+                val result = sightingDAO.saveSighting("Thagul")
+                Toast.makeText(activity, "Save sighting result: $result", Toast.LENGTH_SHORT).show()
+                Looper.loop()
+            }
+        }
+        btnGetSighting = findViewById(R.id.btn_get_sightings)
+        btnGetSighting.setOnClickListener {
+            thread {
+                Looper.prepare()
+                val sightingDAO = SightingDAO(this)
+                val sightings = sightingDAO.getSightings()
+                //Toast.makeText(activity, "Save sighting result: $result", Toast.LENGTH_SHORT).show()
+                Looper.loop()
+            }
+        }
+        /*
         btnRegister.setOnClickListener {
             thread {
                 Looper.prepare()
@@ -87,6 +108,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 Looper.loop()
             }
         }
+        */
         btnLogin = findViewById(R.id.btn_login)
         btnLogin.setOnClickListener {
             thread {

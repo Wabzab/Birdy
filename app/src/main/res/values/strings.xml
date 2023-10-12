@@ -8,4 +8,5 @@
     <string name="saved_lat_key">pref_lat</string>
     <string name="saved_lng_key">pref_lng</string>
     <string name="saved_dist_key">pref_dist</string>
+    <string name="saved_username_key">pref_username</string>
 </resources>

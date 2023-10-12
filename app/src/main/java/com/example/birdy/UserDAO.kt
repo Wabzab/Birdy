@@ -17,10 +17,12 @@ This involves user registration and user login.
 class UserDAO(activity: Activity) {
 
     private val db = Firebase.firestore
-    var sharedPreferences: SharedPreferences
+    private var sharedPreferences: SharedPreferences
+    private val activity: Activity
 
     init {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
+        this.activity = activity
     }
 
     /*
@@ -61,8 +63,9 @@ class UserDAO(activity: Activity) {
             if (Utils.isPassValid(password, doc.get("password") as String)) {
                 with (sharedPreferences.edit()) {
                     val distance = doc.get("distance") as Long
-                    putInt("distance", distance.toInt())
-                    putString("username", username)
+                    putInt(activity.getString(R.string.saved_dist_key), distance.toInt())
+                    putString(activity.getString(R.string.saved_username_key), username)
+                    commit()
                 }
                 Log.d("USER", "User logged in!")
                 return true
