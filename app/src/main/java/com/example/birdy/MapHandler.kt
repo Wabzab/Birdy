@@ -20,7 +20,6 @@ object MapHandler {
             val lat = prefs.getString(activity.getString(R.string.saved_lat_key), "0")
             val lng = prefs.getString(activity.getString(R.string.saved_lng_key), "0")
             val dist = prefs.getInt(activity.getString(R.string.saved_dist_key), 0)
-            Log.d("HOTSPOT", "$lat | $lng | $dist")
             val hotspotJson = try {
                 if (lat != null && lng != null) {
                     buildURLForHotspot(lat, lng, dist)?.readText()
