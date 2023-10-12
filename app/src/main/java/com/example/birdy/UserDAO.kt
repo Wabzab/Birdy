@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.preference.PreferenceManager
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CompletableDeferred
@@ -22,56 +23,54 @@ class UserDAO(activity: Activity) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
     }
 
-    // A coroutine function that waits for the success
-    // Careful of using on the UI thread as it may cause the app to freeze...
-    // https://www.reddit.com/r/Kotlin/comments/iceztd/how_to_return_value_from_from_a_listener/
-    suspend fun registerUser(user: User): Boolean {
-        val def = CompletableDeferred<Boolean>()
+    /*
+        Registers a new User in Firestore if the name is not already taken.
+        Returns a boolean value that represents the result (Success/Failure)
+        Must be run on a separate thread with a Looper else it won't work!
+    */
+    fun registerUser(user: User): Boolean {
         val newUser = db.collection("users").document(user.username)
-        newUser.get()
-            .addOnSuccessListener {
-                Log.d("USER", "Username already taken!")
-                def.complete(false)
-            }
-            .addOnFailureListener {
-                val data = hashMapOf(
-                    "password" to user.password,
-                    "email" to user.email,
-                    "distance" to user.distance
-                )
-                newUser.set(data)
-                    .addOnSuccessListener {
-                        Log.d("USER", "${user.username} added!")
-                        def.complete(true)
-                    }
-                    .addOnFailureListener {
-                        Log.d("USER", "Error adding ${user.username}: $it")
-                    }
-            }
-        return def.await()
+        val getTask = newUser.get()
+        val getResult = kotlin.runCatching { Tasks.await(getTask) }
+        val doc = getResult.getOrNull() ?: return false
+        if (!doc.exists()) {
+            val data = hashMapOf(
+                "password" to Utils.hashPass(user.password),
+                "email" to user.email,
+                "distance" to user.distance
+            )
+            val setTask = newUser.set(data)
+            val setResult = kotlin.runCatching { Tasks.await(setTask) }
+            Log.d("USER", "User registered!")
+            return setResult.isSuccess
+        }
+        Log.d("USER", "Username taken!")
+        return false
     }
 
-    // A coroutine function that waits for the success or failure of a user login attempt
-    suspend fun loginUser(username: String, password: String): Boolean {
-        val def = CompletableDeferred<Boolean>()
-        // Check for name and password match
-        val user = db.collection("users").document(username)
-            .get()
-            .addOnSuccessListener {
-                if (it.get("password") == password) {
-                    with (sharedPreferences.edit()) {
-                        putInt("distance", it.get("distance") as Int)
-                        putString("username", username)
-                    }
+    /*
+        Logs in a user using the provided username and password credentials.
+        Returns a boolean value that represent the result (Success/Failure)
+        Must be run on a separate thread with a Looper else it won't work!
+     */
+    fun loginUser(username: String, password: String): Boolean {
+        val getTask = db.collection("users").document(username).get()
+        val getResult = kotlin.runCatching { Tasks.await(getTask) }
+        val doc = getResult.getOrNull() ?: return false
+        if (doc.exists()) {
+            if (Utils.isPassValid(password, doc.get("password") as String)) {
+                with (sharedPreferences.edit()) {
+                    val distance = doc.get("distance") as Long
+                    putInt("distance", distance.toInt())
+                    putString("username", username)
                 }
-                Log.d("USER", "$username logged in!")
-                def.complete(true)
+                Log.d("USER", "User logged in!")
+                return true
             }
-            .addOnFailureListener {
-                Log.d("USER", "Username or password incorrect!")
-                def.complete(false)
-            }
-        return def.await()
+            Log.d("USER", "Incorrect password!")
+            return false
+        }
+        Log.d("USER", "No user found!")
+        return false
     }
-
 }

@@ -45,7 +45,6 @@ object MapHandler {
 
     private fun createHotspotMarkers(hotspots: Array<Hotspot>) {
         for (hotspot in hotspots) {
-            Log.d("MAP", "${hotspot.locName}")
             val lat = hotspot.lat
             val lng = hotspot.lng
             if (lat != null && lng != null) {

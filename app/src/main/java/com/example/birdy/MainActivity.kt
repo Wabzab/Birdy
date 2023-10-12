@@ -13,6 +13,8 @@ import android.util.Log
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
@@ -23,7 +25,10 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
+import kotlin.concurrent.thread
+import kotlin.system.measureTimeMillis
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -32,18 +37,23 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var navigationView: NavigationView
     private lateinit var map: GoogleMap
 
+    private lateinit var btnRegister: Button
+    private lateinit var btnLogin: Button
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
     lateinit var currentLocation: Location
 
     private lateinit var sharedPref: SharedPreferences
+    private lateinit var activity: MainActivity
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        activity = this
         sharedPref = getDefaultSharedPreferences(this)
         if (!sharedPref.contains(getString(R.string.saved_dist_key))) {
             with (sharedPref.edit()) {
@@ -60,6 +70,33 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        btnRegister = findViewById(R.id.btn_register)
+        btnRegister.setOnClickListener {
+            thread {
+                Looper.prepare()
+                val user = User(
+                    "Cathat",
+                    "greeneggsandham",
+                    "example@email.com",
+                    5
+                )
+                val userDAO = UserDAO(activity)
+                val result = userDAO.registerUser(user)
+                Toast.makeText(activity, "User registration result: $result", Toast.LENGTH_SHORT).show()
+                Looper.loop()
+            }
+        }
+        btnLogin = findViewById(R.id.btn_login)
+        btnLogin.setOnClickListener {
+            thread {
+                Looper.prepare()
+                val userDAO = UserDAO(activity)
+                val result = userDAO.loginUser("Cathat", "greeneggsandham")
+                Toast.makeText(activity, "User login result: $result", Toast.LENGTH_SHORT).show()
+                Looper.loop()
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -124,7 +161,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 p0.lastLocation?.let {
                     currentLocation = it
                     setLocation(currentLocation)
-                    Log.d(TAG, "Location updated")
                 } ?: {
                     Log.d(TAG, "Location information isn't available.")
                 }
