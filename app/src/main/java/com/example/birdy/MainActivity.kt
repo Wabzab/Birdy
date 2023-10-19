@@ -104,8 +104,10 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this, ViewObservations::class.java)
                     startActivity(intent)
                 }
-                R.id.nav_settings ->
-                    Log.d("Navigation", "Settings")
+                R.id.nav_settings -> {
+                    val intent = Intent(this, Settings::class.java)
+                    startActivity(intent)
+                }
                 R.id.nav_logout -> {
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
