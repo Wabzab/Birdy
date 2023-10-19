@@ -19,8 +19,16 @@
         android:theme="@style/Theme.Birdy"
         tools:targetApi="31">
         <activity
-            android:name=".ViewObservations"
-            android:exported="false" />
+            android:name=".SignUpActivity"
+            android:exported="false"
+            android:label="@string/title_activity_sign_up"
+            android:theme="@style/Theme.Birdy" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:label="@string/title_activity_login"
+            android:theme="@style/Theme.Birdy" />
+
 
         <meta-data
             android:name="com.google.android.gms.version"
