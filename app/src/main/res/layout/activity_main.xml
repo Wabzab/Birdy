@@ -22,30 +22,6 @@
             tools:context=".MapsActivity"
             tools:layout="@layout/activity_main" />
 
-        <Button
-            android:id="@+id/btn_save_sighting"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="Test Sighting Save"/>
-
-        <Button
-            android:id="@+id/btn_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/btn_save_sighting"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="Test Login"/>
-
-        <Button
-            android:id="@+id/btn_get_sightings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/btn_login"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="Test Sightings Get"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
