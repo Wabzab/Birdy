@@ -3,6 +3,7 @@ package com.example.birdy
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
@@ -99,12 +100,16 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId) {
                 R.id.nav_map ->
                     Log.d("Navigation", "Map")
-                R.id.nav_sightings ->
-                    Log.d("Navigation", "Sightings")
+                R.id.nav_sightings -> {
+                    val intent = Intent(this, ViewObservations::class.java)
+                    startActivity(intent)
+                }
                 R.id.nav_settings ->
                     Log.d("Navigation", "Settings")
-                R.id.nav_logout ->
-                    Log.d("Navigation", "Logout")
+                R.id.nav_logout -> {
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
             true

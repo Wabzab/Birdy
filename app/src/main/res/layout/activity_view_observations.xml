@@ -35,7 +35,7 @@
             <ImageView
                 android:layout_width="38dp"
                 android:layout_height="38dp"
-                android:src="@drawable/MenuIcon"
+                android:src="@drawable/menu_icon"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="-35dp"
@@ -44,7 +44,7 @@
             <ImageView
                 android:layout_width="38dp"
                 android:layout_height="38dp"
-                android:src="@drawable/ProfileIcon"
+                android:src="@drawable/profile_icon"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="336dp"
                 android:layout_marginTop="-35dp"
@@ -64,7 +64,7 @@
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/ShuffleIcon"
+                android:src="@drawable/shuffle_icon"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="140dp"
                 android:layout_marginTop="26dp"
@@ -92,7 +92,6 @@
                 android:layout_marginLeft="18dp"
                 android:layout_marginTop="130dp"/>
         </androidx.cardview.widget.CardView>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

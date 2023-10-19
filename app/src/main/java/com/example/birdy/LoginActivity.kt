@@ -1,19 +1,21 @@
+package com.example.birdy
+
 import android.content.Intent
 import android.os.Bundle
+import android.os.Looper
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.birdy.MainActivity
-import com.example.birdy.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import kotlin.concurrent.thread
+import kotlin.math.sign
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var loginButton: Button
-    private lateinit var auth: FirebaseAuth
+    private lateinit var signupButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,25 +24,30 @@ class LoginActivity : AppCompatActivity() {
         usernameEditText = findViewById(R.id.usernameEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
         loginButton = findViewById(R.id.btnLogin)
+        signupButton = findViewById(R.id.btnSignUp)
 
-        auth = FirebaseAuth.getInstance()
+        val userDao = UserDAO(this)
 
         loginButton.setOnClickListener {
             val username = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
 
-            auth.signInWithEmailAndPassword("$username@example.com", password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Login successful, go to the main activity
-                        val user: FirebaseUser? = auth.currentUser
-                        // Start the MainActivity
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                    } else {
-                        // Handle login failure (display an error message)
-                    }
+            thread {
+                Looper.prepare()
+                val result = userDao.loginUser(username, password)
+                if (result) {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "Details entered are incorrect!", Toast.LENGTH_LONG).show()
                 }
+                Looper.loop()
+            }
+        }
+
+        signupButton.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
         }
     }
 }
