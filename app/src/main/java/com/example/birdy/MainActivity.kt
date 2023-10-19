@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
@@ -59,9 +60,9 @@ class MainActivity : AppCompatActivity() {
         navigationView = findViewById(R.id.navigation_view)
         drawerLayout = findViewById(R.id.drawer_layout)
 
+        mapHandler = MapHandler(this, supportFragmentManager)
         startNavDrawer()
         subscribeToLocationUpdates()
-        mapHandler = MapHandler(this, supportFragmentManager)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -156,6 +157,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setLocation(location: Location?) {
         if (location != null) {
+            mapHandler.setUserPosition(LatLng(location.latitude, location.longitude))
             with (sharedPref.edit()) {
                 putString(getString(R.string.saved_lat_key), location.latitude.toString())
                 putString(getString(R.string.saved_lng_key), location.longitude.toString())

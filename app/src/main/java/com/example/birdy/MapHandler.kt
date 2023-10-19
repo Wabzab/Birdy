@@ -15,6 +15,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -24,6 +26,7 @@ import kotlin.concurrent.thread
 class MapHandler(activity: Activity, supportFragmentManager: FragmentManager): OnMapReadyCallback, OnMarkerClickListener {
 
     private lateinit var map: GoogleMap
+    private var userMarker: Marker? = null
     private var mapFragment: SupportMapFragment
 
     private var fusedLocationClient: FusedLocationProviderClient
@@ -47,30 +50,8 @@ class MapHandler(activity: Activity, supportFragmentManager: FragmentManager): O
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
     }
 
-    fun showRouteToDest(destination: LatLng) {
-        val lat = sharedPrefs.getString(latKey, "0")
-        val lng = sharedPrefs.getString(lngKey, "0")
-        val start = LatLng(lat!!.toDouble(), lng!!.toDouble())
-        thread {
-            val routeJson = try {
-                buildURLForRoute(start, destination).readText()
-            } catch (e: java.lang.Exception) {
-                Log.d("ROUTES", "$e")
-                return@thread
-            }
-            activity.runOnUiThread { digestRouteJson(routeJson) }
-        }
-    }
-
-    private fun digestRouteJson(routeJson: String?) {
-        val gson = Gson()
-        val routeData: Route = gson.fromJson(routeJson, Route::class.java)
-        Log.d("ROUTES", "${routeData.routes}")
-    }
-
     private fun loadHotspots() {
         thread {
-            Log.d("HOTSPOT", "Hotspot thread started.")
             val lat = sharedPrefs.getString(latKey, "0")
             val lng = sharedPrefs.getString(lngKey, "0")
             val dist = sharedPrefs.getInt(dstKey, 0)
@@ -90,7 +71,6 @@ class MapHandler(activity: Activity, supportFragmentManager: FragmentManager): O
     }
 
     private fun readHotspotJson(hotspotJson: String?) {
-        Log.d("HOTSPOT", "Reading hotspot json.")
         val gson = Gson()
         val hotspotData: Array<Hotspot> = gson.fromJson(hotspotJson, Array<Hotspot>::class.java)
         createHotspotMarkers(hotspotData)
@@ -106,8 +86,15 @@ class MapHandler(activity: Activity, supportFragmentManager: FragmentManager): O
                     .position(pos)
                     .title(hotspot.locName)
                     .snippet("Lat: $lat | Lng: $lng")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bird_icon))
                 )
             }
+        }
+    }
+
+    fun setUserPosition(position: LatLng) {
+        if (userMarker != null) {
+            userMarker!!.position = position
         }
     }
 
@@ -118,13 +105,11 @@ class MapHandler(activity: Activity, supportFragmentManager: FragmentManager): O
         map.mapType = GoogleMap.MAP_TYPE_TERRAIN
         loadHotspots()
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 10F))
-            showRouteToDest(LatLng(location.latitude, location.longitude))
-            MapRouter.showDirection(
-                map,
-                LatLng(sharedPrefs.getString(latKey, "0")!!.toDouble(), sharedPrefs.getString(lngKey, "0")!!.toDouble()),
-                LatLng(location.latitude+5, location.longitude)
+            userMarker = map.addMarker(MarkerOptions()
+                .position(LatLng(location.latitude, location.longitude))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.user_icon))
             )
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 10F))
         }
     }
 

@@ -8,7 +8,9 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.Dot
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PatternItem
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.gson.Gson
@@ -24,7 +26,7 @@ object MapRouter {
         return "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}" +
                 "&destination=${dest.latitude},${dest.longitude}" +
                 "&sensor=false" +
-                "&mode=driving" +
+                "&mode=walking" +
                 "&key=${BuildConfig.MAPS_API_KEY}"
     }
 
@@ -70,7 +72,6 @@ object MapRouter {
             val request = Request.Builder().url(url).build()
             val response = client.newCall(request).execute()
             val data = response.body().string()
-            Log.d("ROUTES", data)
 
             val result = ArrayList<List<LatLng>>()
             try{
@@ -85,13 +86,13 @@ object MapRouter {
             }
 
             handler.post {
-                Log.d("ROUTES", "Drawing polyline!")
                 val lineOption = PolylineOptions()
                 for (i in result.indices){
                     lineOption.addAll(result[i])
                     lineOption.width(10f)
                     lineOption.color(Color.BLUE)
                     lineOption.geodesic(true)
+                    lineOption.pattern(listOf(Dot()))
                 }
                 for(p in polylines) {
                     p.isVisible = false
