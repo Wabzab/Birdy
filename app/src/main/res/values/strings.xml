@@ -9,4 +9,8 @@
     <string name="saved_lng_key">pref_lng</string>
     <string name="saved_dist_key">pref_dist</string>
     <string name="saved_username_key">pref_username</string>
+    <string name="title_activity_login2">LoginActivity2</string>
+    <string name="title_activity_sign_up2">SignUpActivity2</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
 </resources>
