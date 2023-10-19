@@ -29,12 +29,14 @@
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.Birdy" />
 
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="${MAPS_API_KEY}" />
+            android:value="AIzaSyAOdPyl3qFqDmSVWYSxQ7h0oFCR9CypBJM"/>
+
 
         <uses-library
             android:name="org.apache.http.legacy"
