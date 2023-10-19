@@ -19,23 +19,17 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
-import kotlin.system.measureTimeMillis
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var navigationView: NavigationView
-    private lateinit var map: GoogleMap
 
     private lateinit var btnSaveSighting: Button
     private lateinit var btnLogin: Button
@@ -48,6 +42,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var sharedPref: SharedPreferences
     private lateinit var activity: MainActivity
+    private lateinit var mapHandler: MapHandler
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,63 +57,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 commit()
             }
         }
-
         navigationView = findViewById(R.id.navigation_view)
         drawerLayout = findViewById(R.id.drawer_layout)
 
+        mapHandler = MapHandler(this, supportFragmentManager)
         startNavDrawer()
         subscribeToLocationUpdates()
-
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-
-        btnSaveSighting = findViewById(R.id.btn_save_sighting)
-        btnSaveSighting.setOnClickListener {
-            thread {
-                Looper.prepare()
-                val sightingDAO = SightingDAO(this)
-                val result = sightingDAO.saveSighting("Thagul")
-                Toast.makeText(activity, "Save sighting result: $result", Toast.LENGTH_SHORT).show()
-                Looper.loop()
-            }
-        }
-        btnGetSighting = findViewById(R.id.btn_get_sightings)
-        btnGetSighting.setOnClickListener {
-            thread {
-                Looper.prepare()
-                val sightingDAO = SightingDAO(this)
-                val sightings = sightingDAO.getSightings()
-                //Toast.makeText(activity, "Save sighting result: $result", Toast.LENGTH_SHORT).show()
-                Looper.loop()
-            }
-        }
-        /*
-        btnRegister.setOnClickListener {
-            thread {
-                Looper.prepare()
-                val user = User(
-                    "Cathat",
-                    "greeneggsandham",
-                    "example@email.com",
-                    5
-                )
-                val userDAO = UserDAO(activity)
-                val result = userDAO.registerUser(user)
-                Toast.makeText(activity, "User registration result: $result", Toast.LENGTH_SHORT).show()
-                Looper.loop()
-            }
-        }
-        */
-        btnLogin = findViewById(R.id.btn_login)
-        btnLogin.setOnClickListener {
-            thread {
-                Looper.prepare()
-                val userDAO = UserDAO(activity)
-                val result = userDAO.loginUser("Cathat", "greeneggsandham")
-                Toast.makeText(activity, "User login result: $result", Toast.LENGTH_SHORT).show()
-                Looper.loop()
-            }
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -129,11 +73,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-        MapHandler.map = map
-        MapHandler.loadHotspots(this)
-    }
 
     @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(
@@ -190,10 +129,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         if (isLocationPermissionGranted()) {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                setLocation(location)
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 15F))
-            }
         }
     }
 
@@ -220,16 +155,65 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
     private fun setLocation(location: Location?) {
         if (location != null) {
+            mapHandler.setUserPosition(LatLng(location.latitude, location.longitude))
             with (sharedPref.edit()) {
                 putString(getString(R.string.saved_lat_key), location.latitude.toString())
                 putString(getString(R.string.saved_lng_key), location.longitude.toString())
                 commit()
             }
         }
-
     }
 
 }
+
+/*
+        btnSaveSighting = findViewById(R.id.btn_save_sighting)
+        btnSaveSighting.setOnClickListener {
+            thread {
+                Looper.prepare()
+                val sightingDAO = SightingDAO(this)
+                val result = sightingDAO.saveSighting("Thagul")
+                Toast.makeText(activity, "Save sighting result: $result", Toast.LENGTH_SHORT).show()
+                Looper.loop()
+            }
+        }
+        btnGetSighting = findViewById(R.id.btn_get_sightings)
+        btnGetSighting.setOnClickListener {
+            thread {
+                Looper.prepare()
+                val sightingDAO = SightingDAO(this)
+                val sightings = sightingDAO.getSightings()
+                //Toast.makeText(activity, "Save sighting result: $result", Toast.LENGTH_SHORT).show()
+                Looper.loop()
+            }
+        }
+
+        btnRegister.setOnClickListener {
+            thread {
+                Looper.prepare()
+                val user = User(
+                    "Cathat",
+                    "greeneggsandham",
+                    "example@email.com",
+                    5
+                )
+                val userDAO = UserDAO(activity)
+                val result = userDAO.registerUser(user)
+                Toast.makeText(activity, "User registration result: $result", Toast.LENGTH_SHORT).show()
+                Looper.loop()
+            }
+        }
+
+        btnLogin = findViewById(R.id.btn_login)
+        btnLogin.setOnClickListener {
+            thread {
+                Looper.prepare()
+                val userDAO = UserDAO(activity)
+                val result = userDAO.loginUser("Cathat", "greeneggsandham")
+                Toast.makeText(activity, "User login result: $result", Toast.LENGTH_SHORT).show()
+                Looper.loop()
+            }
+        }
+        */
