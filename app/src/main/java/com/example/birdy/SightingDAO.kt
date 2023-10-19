@@ -77,7 +77,6 @@ class SightingDAO(activity: Activity) {
                 Log.d("SIGHTINGS", "${sight.date}")
             }
         }
-
         return sightings
     }
 
