@@ -26,10 +26,5 @@ class Settings : AppCompatActivity() {
         val sharedPrefs = getDefaultSharedPreferences(this)
         val dist = sharedPrefs.getInt(this.getString(R.string.saved_dist_key), 0)
         etDistance.setText("$dist")
-
-        val switchDarkMode: Switch = findViewById(R.id.switchDarkMode)
-        switchDarkMode.setOnClickListener {
-            constraintLayout.setBackgroundColor(Color.DKGRAY)
-        }
     }
 }

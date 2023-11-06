@@ -62,6 +62,6 @@ fun buildURLForTaxonomy(): URL? {
     } catch (e: MalformedURLException) {
         e.printStackTrace()
     }
-    Log.i(LOGGING_TAG, "buildURLForHotspot: $url")
+    Log.i(LOGGING_TAG, "buildURLForTaxonomy: $url")
     return url
     }

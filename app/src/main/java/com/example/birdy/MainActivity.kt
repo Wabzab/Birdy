@@ -32,9 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var navigationView: NavigationView
 
-    private lateinit var btnSaveSighting: Button
-    private lateinit var btnLogin: Button
-    private lateinit var btnGetSighting: Button
+    private lateinit var btnSaveObservation: Button
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
@@ -64,6 +62,12 @@ class MainActivity : AppCompatActivity() {
         mapHandler = MapHandler(this, supportFragmentManager)
         startNavDrawer()
         subscribeToLocationUpdates()
+
+        btnSaveObservation = findViewById(R.id.btnSaveObservation)
+        btnSaveObservation.setOnClickListener {
+            val intent = Intent(this, SaveObservation::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

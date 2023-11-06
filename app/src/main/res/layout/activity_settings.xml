@@ -77,14 +77,6 @@
             android:textSize="15dp"
             android:textStyle="bold" />
 
-        <Switch
-            android:id="@+id/switchDarkMode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="320dp"
-            android:layout_marginTop="68dp"
-            android:onClick="onSwitchClick"
-            android:track="@drawable/bg_track" />
 
     </androidx.cardview.widget.CardView>
 

@@ -29,7 +29,16 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/btnSaveObservation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Save Observation"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

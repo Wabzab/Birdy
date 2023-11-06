@@ -1,0 +1,16 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="32dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/tvCommonName"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAlignment="center"
+        android:text="This is what a species name could look like?"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+</FrameLayout>
