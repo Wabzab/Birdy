@@ -15,4 +15,9 @@ data class Species(
     @SerializedName("familyCode") var family_code: String? = null,
     @SerializedName("familyComName") var family_com_name: String? = null,
     @SerializedName("familySciName") var family_sci_name: String? = null
-)
+) {
+    override fun toString(): String {
+        return "$common_name"
+    }
+}
+
