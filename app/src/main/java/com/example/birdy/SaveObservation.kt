@@ -3,17 +3,12 @@ package com.example.birdy
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Filter
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -24,12 +19,14 @@ class SaveObservation : AppCompatActivity(), AdapterView.OnItemSelectedListener 
     lateinit var speciesAdapter: ArrayAdapter<Species>
     lateinit var spnSpecies: Spinner
     lateinit var btnSave: Button
+    lateinit var btnCancel: Button
     lateinit var etFilter: EditText
     lateinit var tvComName: TextView
     lateinit var tvSciName: TextView
     lateinit var tvFamComName: TextView
     lateinit var tvFamSciName: TextView
     lateinit var tvOrder: TextView
+    lateinit var selectedSpecies: Species
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +34,7 @@ class SaveObservation : AppCompatActivity(), AdapterView.OnItemSelectedListener 
 
         spnSpecies = findViewById(R.id.spnSpecies)
         btnSave = findViewById(R.id.btnSave)
+        btnCancel = findViewById(R.id.btnCancel)
         etFilter = findViewById(R.id.etFilter)
         tvComName = findViewById(R.id.tvComName)
         tvSciName = findViewById(R.id.tvSciName)
@@ -44,9 +42,30 @@ class SaveObservation : AppCompatActivity(), AdapterView.OnItemSelectedListener 
         tvFamSciName = findViewById(R.id.tvFamSciName)
         tvOrder = findViewById(R.id.tvOrder)
 
-        btnSave.setOnClickListener {
-            val intent = Intent(this, ViewObservations::class.java)
+        val sightingDAO = SightingDAO(this)
+
+        btnCancel.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+        }
+
+        btnSave.setOnClickListener {
+            if (selectedSpecies.equals(null)) {
+                Toast.makeText(this, "Select a species!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            thread {
+                Looper.prepare()
+                val result = sightingDAO.saveSighting(selectedSpecies)
+                if (result) {
+                    Toast.makeText(this, "Observation saved successfully!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, ViewObservations::class.java)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "Failed to save details!", Toast.LENGTH_LONG).show()
+                }
+                Looper.loop()
+            }
         }
 
         etFilter.addTextChangedListener(object: TextWatcher {
@@ -86,6 +105,7 @@ class SaveObservation : AppCompatActivity(), AdapterView.OnItemSelectedListener 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
         if (parent != null) {
             val item: Species = parent.getItemAtPosition(pos) as Species
+            selectedSpecies = item
             tvComName.text = item.common_name
             tvSciName.text = item.scientific_name
             tvFamComName.text = item.family_com_name

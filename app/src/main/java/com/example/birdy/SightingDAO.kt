@@ -27,7 +27,7 @@ class SightingDAO(activity: Activity) {
         Creates a new collection for the species if this is the first sighting,
         otherwise adds a new entry to the existing species collection.
      */
-    fun saveSighting(speciesCode: String): Boolean {
+    fun saveSighting(species: Species): Boolean {
         val username = sharedPreferences.getString(activity.getString(R.string.saved_username_key), null) ?: return false
         val lat = sharedPreferences.getString(activity.getString(R.string.saved_lat_key), null) ?: return false
         val lng = sharedPreferences.getString(activity.getString(R.string.saved_lng_key), null) ?: return false
@@ -36,12 +36,24 @@ class SightingDAO(activity: Activity) {
             "lng" to lng.toDouble(),
             "date" to Calendar.getInstance().time
         )
-
-        val sightingCollection = db.collection("sightings/$username/$speciesCode")
-        val saveTask = sightingCollection.add(sight)
+        // Check if species observed previously, otherwise create document
+        val speciesDoc = db.collection("sightings").document(species.species_code)
+        val getDocTask = speciesDoc.get()
+        val docResult = kotlin.runCatching { Tasks.await(getDocTask) }
+        val doc = docResult.getOrNull() ?: return false
+        if (!doc.exists()) {
+            val setTask = speciesDoc.set(species)
+            val setResult = kotlin.runCatching { Tasks.await(setTask) }
+            if (setResult.isFailure) {
+                return false
+            }
+        }
+        // Add sightings to user profile for observed species
+        val userSightings = speciesDoc.collection(username)
+        val saveTask = userSightings.add(sight)
         val saveResult = kotlin.runCatching { Tasks.await(saveTask) }
         if (saveResult.isSuccess) {
-            val userUpdateTask = db.collection("users").document(username).update("sightings", FieldValue.arrayUnion(speciesCode))
+            val userUpdateTask = db.collection("users").document(username).update("sightings", FieldValue.arrayUnion(species.species_code))
             kotlin.runCatching { userUpdateTask }
         }
         return saveResult.isSuccess
