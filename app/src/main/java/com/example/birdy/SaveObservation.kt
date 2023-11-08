@@ -9,8 +9,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.core.widget.addTextChangedListener
-import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import kotlin.concurrent.thread
 

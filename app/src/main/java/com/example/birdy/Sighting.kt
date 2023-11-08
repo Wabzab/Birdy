@@ -3,8 +3,10 @@ package com.example.birdy
 import java.util.Date
 
 data class Sighting(
-    val speciesCode: String,
-    val sights: ArrayList<Sight>
+    val species: String,
+    val lat: Double,
+    val lng: Double,
+    val date: Date
 )
 
 data class Sight(

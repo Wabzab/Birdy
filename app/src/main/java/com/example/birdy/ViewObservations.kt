@@ -2,65 +2,53 @@ package com.example.birdy
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.TextView
-import androidx.cardview.widget.CardView
-import android.view.LayoutInflater
-import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
+import android.widget.ImageButton
+import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlin.concurrent.thread
 
 class ViewObservations : AppCompatActivity() {
 
-    // Declaring previousCardViewId var to keep track of the previous Card View's ID
-    private var previousCardViewId = 0
+    lateinit var observationAdapter: ObservationAdapter
+    lateinit var etSearchFilter: EditText
+    lateinit var btnCancel: ImageButton
+    lateinit var rvObservation: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_observations)
 
+        etSearchFilter = findViewById(R.id.etSearchFilter)
+        btnCancel = findViewById(R.id.ibtnCancel)
+        rvObservation = findViewById(R.id.rvObservations)
+
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val sightingDAO = SightingDAO(this)
-        val sightings = sightingDAO.getSightings()
-        val constraintLayout = findViewById<ConstraintLayout>(R.id.ViewObservationsPage)
+        thread {
+            val sightings = sightingDAO.getSightings(sharedPreferences.getString(getString(R.string.saved_username_key), "") ?: "")
+            runOnUiThread { populateSightings(sightings.toList()) }
+        }
 
-        // LayoutInflater for inflating cardview_species.xml
-        val inflater = LayoutInflater.from(this)
-
-        for (sighting in sightings) {
-            // Inflate the cardview_species.xml layout
-            val cardView = inflater.inflate(R.layout.cardview_species, null) as CardView
-
-            // Set a unique ID for each CardView
-            cardView.id = View.generateViewId()
-
-            // Find the TextView inside the CardView
-            val speciesTextView = cardView.findViewById<TextView>(R.id.speciesTextView)
-            val GreyLocationIcon = cardView.findViewById<ImageView>(R.id.GreyLocationIcon)
-            val InnerCardView = cardView.findViewById<CardView>(R.id.InnerCardView)
-            val InnerBirdPic= cardView.findViewById<ImageView>(R.id.InnerBirdPic)
-            val TextViewCoordinates = cardView.findViewById<TextView>(R.id.TextViewCoordinates)
-            val TextViewDescription = cardView.findViewById<TextView>(R.id.TextViewDescription)
-
-            // Set the species name
-            speciesTextView.text = sighting.speciesCode
-
-            // Set layout parameters for the CardView
-            val params = ConstraintLayout.LayoutParams(
-                ConstraintLayout.LayoutParams.MATCH_PARENT,
-                ConstraintLayout.LayoutParams.WRAP_CONTENT
-            )
-
-            // Set topToBottom property for the CardView
-            if (previousCardViewId != 0) {
-                params.topToBottom = previousCardViewId
+        etSearchFilter.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                return
             }
 
-            cardView.layoutParams = params
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                observationAdapter.filter.filter(s.toString())
+            }
 
-            // Add the CardView to the ConstraintLayout
-            constraintLayout.addView(cardView)
+            override fun afterTextChanged(p0: Editable?) {
+                return
+            }
+        })
+    }
 
-            // Update previousCardViewId to this CardView's ID
-            previousCardViewId = cardView.id
-        }
+    fun populateSightings(sightings: List<Sighting>) {
+        observationAdapter = ObservationAdapter(sightings.toList())
+        rvObservation.adapter = observationAdapter
     }
 }

@@ -5,11 +5,14 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.preference.PreferenceManager
 import com.google.android.gms.tasks.Tasks
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.util.Calendar
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SightingDAO(activity: Activity) {
 
@@ -62,31 +65,32 @@ class SightingDAO(activity: Activity) {
     /*
         Returns an array of all sightings for the logged in User.
      */
-    fun getSightings(): ArrayList<Sighting> {
-        val username = sharedPreferences.getString(activity.getString(R.string.saved_username_key), null) ?: return ArrayList(emptyList())
-        val userTask = db.collection("users").document(username).get()
-        val user = kotlin.runCatching { Tasks.await(userTask) }.getOrNull() ?: return ArrayList(emptyList())
-        val species = user.get("sightings") as List<*>
-        if (species.isEmpty()) {
-            return ArrayList(emptyList())
-        }
-        val sightings: ArrayList<Sighting> = ArrayList(emptyList())
-        species.forEach { speciesCode ->
-            val sightingsTask = db.collection("sightings/$username/$speciesCode").get()
-            val sightingsResult = kotlin.runCatching { Tasks.await(sightingsTask) }.getOrNull() ?: return@forEach
-            var sighting = Sighting("$speciesCode", ArrayList())
-            sightingsResult.forEach {
-                val lat = it.getDouble("lat") ?: return@forEach
-                val lng = it.getDouble("lng") ?: return@forEach
-                val date = it.getDate("date") ?: return@forEach
-                val sight = Sight(lat, lng, date)
-                sighting.sights.add(sight)
-            }
-            sightings.add(sighting)
-        }
-        sightings.forEach { sighting ->
-            sighting.sights.forEach { sight ->
-                Log.d("SIGHTINGS", "${sight.date}")
+    fun getSightings(username: String): ArrayList<Sighting> {
+        val getUserTask = db.collection("users").document(username).get()
+        val user = kotlin.runCatching { Tasks.await(getUserTask) }.getOrNull() ?: return ArrayList()
+        val sightings = ArrayList<Sighting>()
+        for (code in user.get("sightings") as List<*>) {
+            val species = kotlin.runCatching {
+                Tasks.await(
+                    db.collection("sightings").document(code as String).get()
+                )
+            }.getOrNull() ?: return ArrayList()
+            val speciesSightings = kotlin.runCatching {
+                Tasks.await(
+                    db.collection("sightings").document(code as String).collection(username).get()
+                )
+            }.getOrNull() ?: return ArrayList()
+            for (sighting in speciesSightings.documents) {
+                val speciesData = species.data!!
+                val data = sighting.data!!
+                sightings.add(
+                    Sighting(
+                        speciesData["common_name"] as String,
+                        data["lat"] as Double,
+                        data["lng"] as Double,
+                        (data["date"] as Timestamp).toDate()
+                    )
+                )
             }
         }
         return sightings
