@@ -1,4 +1,4 @@
-package com.example.birdy
+package com.example.birdy.accounts
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,46 +7,50 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.birdy.R
 import kotlin.concurrent.thread
-import kotlin.math.sign
 
-class LoginActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
 
     private lateinit var usernameEditText: EditText
     private lateinit var passwordEditText: EditText
+    private lateinit var signUpButton: Button
     private lateinit var loginButton: Button
-    private lateinit var signupButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_sign_up)
 
         usernameEditText = findViewById(R.id.usernameEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
+        signUpButton = findViewById(R.id.signUpButton)
         loginButton = findViewById(R.id.btnLogin)
-        signupButton = findViewById(R.id.btnSignUp)
 
-        val userDao = UserDAO(this)
 
-        loginButton.setOnClickListener {
+        signUpButton.setOnClickListener {
             val username = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
 
+            val userDao = UserDAO(this)
+
+            val user = User(username, password, "", 5)
+
             thread {
                 Looper.prepare()
-                val result = userDao.loginUser(username, password)
+                val result = userDao.registerUser(user)
                 if (result) {
-                    val intent = Intent(this, MainActivity::class.java)
+                    Toast.makeText(this, "Account registered!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
                 } else {
-                    Toast.makeText(this, "Details entered are incorrect!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Details entered are invalid!", Toast.LENGTH_LONG).show()
                 }
                 Looper.loop()
             }
         }
 
-        signupButton.setOnClickListener {
-            val intent = Intent(this, SignUpActivity::class.java)
+        loginButton.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
     }

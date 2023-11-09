@@ -1,4 +1,4 @@
-package com.example.birdy
+package com.example.birdy.observations
 
 import java.util.Date
 

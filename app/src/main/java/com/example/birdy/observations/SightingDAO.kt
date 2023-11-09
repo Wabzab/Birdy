@@ -1,14 +1,12 @@
-package com.example.birdy
+package com.example.birdy.observations
 
 import android.app.Activity
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.preference.PreferenceManager
+import com.example.birdy.R
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*

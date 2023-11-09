@@ -1,4 +1,4 @@
-package com.example.birdy
+package com.example.birdy.observations
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.birdy.R
 import kotlin.concurrent.thread
 
 class ViewObservations : AppCompatActivity() {

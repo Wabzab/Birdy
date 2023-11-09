@@ -1,16 +1,13 @@
-package com.example.birdy
+package com.example.birdy.maps
 
-import android.annotation.SuppressLint
-import android.app.DownloadManager
 import android.graphics.Color
-import android.os.AsyncTask
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import com.example.birdy.BuildConfig
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Dot
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.PatternItem
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.gson.Gson
@@ -75,7 +72,7 @@ object MapRouter {
 
             val result = ArrayList<List<LatLng>>()
             try{
-                val respObj = Gson().fromJson(data,MapData::class.java)
+                val respObj = Gson().fromJson(data, MapData::class.java)
                 val path = ArrayList<LatLng>()
                 for (i in 0 until respObj.routes[0].legs[0].steps.size){
                     path.addAll(decodePolyline(respObj.routes[0].legs[0].steps[i].polyline.points))

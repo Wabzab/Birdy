@@ -1,9 +1,8 @@
-package com.example.birdy
+package com.example.birdy.utility
 
 import android.net.Uri
 import android.util.Log
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.LatLng
+import com.example.birdy.BuildConfig
 import java.net.MalformedURLException
 import java.net.URL
 

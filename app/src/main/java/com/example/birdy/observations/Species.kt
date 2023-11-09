@@ -1,4 +1,4 @@
-package com.example.birdy
+package com.example.birdy.observations
 
 import com.google.gson.annotations.SerializedName
 

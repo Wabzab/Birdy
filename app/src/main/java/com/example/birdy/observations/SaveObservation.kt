@@ -1,4 +1,4 @@
-package com.example.birdy
+package com.example.birdy.observations
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +9,9 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
+import com.example.birdy.MainActivity
+import com.example.birdy.R
+import com.example.birdy.utility.buildURLForTaxonomy
 import com.google.gson.Gson
 import kotlin.concurrent.thread
 

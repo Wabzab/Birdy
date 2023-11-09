@@ -1,6 +1,4 @@
-package com.example.birdy
-
-import com.google.gson.annotations.SerializedName
+package com.example.birdy.accounts
 
 data class User(
     var username: String,

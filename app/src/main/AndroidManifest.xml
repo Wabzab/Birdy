@@ -19,7 +19,7 @@
         android:theme="@style/Theme.Birdy"
         tools:targetApi="31">
         <activity
-            android:name=".SaveObservation"
+            android:name=".observations.SaveObservation"
             android:exported="false" />
         <activity
             android:name=".Settings"
@@ -41,7 +41,7 @@
             android:foregroundServiceType="location" />
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".accounts.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,13 +50,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignUpActivity"
+            android:name=".accounts.SignUpActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true" />
         <activity
-            android:name=".ViewObservations"
+            android:name=".observations.ViewObservations"
             android:exported="true" />
     </application>
 

@@ -1,4 +1,4 @@
-package com.example.birdy
+package com.example.birdy.observations
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.birdy.R
 import java.text.DateFormat
 import java.util.*
 
@@ -27,13 +28,13 @@ class ObservationAdapter(private val sightings: List<Sighting>): RecyclerView.Ad
     }
 
     // Create new views, called by layout manager
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ObservationAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.sighting_item, parent, false)
         return ViewHolder(view)
     }
 
     // Replace content of a view, called by layout manager
-    override fun onBindViewHolder(holder: ObservationAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val sighting = filteredSightings[position]
         holder.tvCode.text = sighting.species
         val df = DateFormat.getDateInstance()
