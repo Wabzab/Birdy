@@ -123,6 +123,8 @@ class MapHandler(activity: Activity, supportFragmentManager: FragmentManager): O
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        map.uiSettings.isMapToolbarEnabled = false
+        map.uiSettings.isZoomControlsEnabled = false
         map.setOnMarkerClickListener(this)
         map.mapType = GoogleMap.MAP_TYPE_TERRAIN
         loadHotspots()
@@ -147,6 +149,12 @@ class MapHandler(activity: Activity, supportFragmentManager: FragmentManager): O
         addUserMarker()
     }
 
+    fun centerOnUser() {
+        if (userMarker != null) {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(userMarker!!.position, 10F))
+        }
+    }
+
     @SuppressLint("MissingPermission")
     fun addUserMarker() {
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
@@ -154,7 +162,7 @@ class MapHandler(activity: Activity, supportFragmentManager: FragmentManager): O
                 .position(LatLng(location.latitude, location.longitude))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.user_icon))
             )
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 10F))
+            centerOnUser()
         }
     }
 }

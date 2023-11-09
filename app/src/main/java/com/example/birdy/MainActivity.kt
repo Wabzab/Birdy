@@ -84,13 +84,11 @@ class MainActivity : AppCompatActivity() {
 
         btnCenterMap = findViewById(R.id.btnMainCenter)
         btnCenterMap.setOnClickListener {
-            // TODO: Center map on player position
-            //mapHandler.
+            mapHandler.centerOnUser()
         }
 
         btnMenu = findViewById(R.id.btnMainMenu)
         btnMenu.setOnClickListener {
-            // TODO: open dialog menu with map options
             showOptionsDialog()
         }
     }
