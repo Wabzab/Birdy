@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "178652077274",
+    "project_id": "birdy-88f90",
+    "storage_bucket": "birdy-88f90.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178652077274:android:72058edf904cca2fe159e3",
+        "android_client_info": {
+          "package_name": "com.example.birdy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmaYHvLKS7K7oibFaBkiyUqpsTjfFFNfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
