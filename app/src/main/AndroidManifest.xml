@@ -58,6 +58,9 @@
         <activity
             android:name=".observations.ViewObservations"
             android:exported="true" />
+        <activity
+            android:name=".notebook.Notebook"
+            android:exported="true" />
     </application>
 
 </manifest>
