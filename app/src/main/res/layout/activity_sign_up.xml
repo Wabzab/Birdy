@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context=".SignUpActivity">
+    tools:context="SignUpActivity">
 
     <ImageView
         android:id="@+id/birdLogo"
@@ -112,14 +112,16 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/LogInText"
         android:layout_width="56dp"
         android:layout_height="48dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="125dp"
         android:layout_marginBottom="100dp"
+        android:foreground="?attr/selectableItemBackground"
         android:clickable="true"
+        android:focusable="true"
         android:paintFlags="underline"
         android:text="Log in"
         android:textColor="#A3A3A3" />

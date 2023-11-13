@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context=".LoginActivity">
+    tools:context="LoginActivity">
 
     <ImageView
         android:id="@+id/birdLogo"
@@ -24,7 +24,7 @@
         android:layout_below="@+id/birdLogo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:textColor="#FFA500"
+        android:textColor="#bfbfbf"
         android:id="@+id/birdyText" />
 
     <!-- Username EditText -->
@@ -129,14 +129,16 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp "
+        android:id="@+id/signUpText"
+        android:layout_width="89dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="135dp"
-        android:layout_marginBottom="91dp"
+        android:layout_marginEnd="145dp"
+        android:layout_marginBottom="119dp"
         android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
         android:paintFlags="underline"
         android:text="Sign up now"
         android:textColor="#A3A3A3" />
@@ -148,9 +150,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="99dp"
-        android:layout_marginEnd="216dp"
-        android:layout_marginBottom="121dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="245dp"
+        android:layout_marginBottom="118dp"
         android:text="Not a member?"
         android:textColor="#FFFFFF" />
 

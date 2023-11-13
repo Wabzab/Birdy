@@ -2,6 +2,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.birdy.MainActivity
 import com.example.birdy.R
@@ -41,6 +42,13 @@ class LoginActivity : AppCompatActivity() {
                         // Handle login failure (display an error message)
                     }
                 }
+
+            val signUpText = findViewById<TextView>(R.id.signUpText)
+            signUpText.setOnClickListener {
+                // Handle the "Sign up now" click
+                val intent = Intent(this, SignUpActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.birdy.R
 import com.google.firebase.auth.FirebaseAuth
@@ -37,7 +38,17 @@ class SignUpActivity : AppCompatActivity() {
                     } else {
                         // Handle registration failure (display an error message)
                     }
+
+
                 }
+            val LogInText = findViewById<TextView>(R.id.LogInText)
+            LogInText.setOnClickListener {
+                // Handle the "Log In" click
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+            }
+
         }
+
     }
 }

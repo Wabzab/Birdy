@@ -2,10 +2,8 @@ package com.example.birdy
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -15,7 +13,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -86,7 +83,7 @@ class MapHandler(activity: Activity, supportFragmentManager: FragmentManager): O
                     .position(pos)
                     .title(hotspot.locName)
                     .snippet("Lat: $lat | Lng: $lng")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bird_icon))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.BirdIcon))
                 )
             }
         }
