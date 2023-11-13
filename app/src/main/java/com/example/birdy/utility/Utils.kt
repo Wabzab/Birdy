@@ -1,4 +1,4 @@
-package com.example.birdy
+package com.example.birdy.utility
 
 import android.util.Base64
 import android.util.Log

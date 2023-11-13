@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="0dp"
+    android:layout_height="270dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="178dp"
+    app:cardCornerRadius="26dp"
+    app:cardElevation="10dp"
+    app:cardUseCompatPadding="true"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:cardBackgroundColor="#000000">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:gravity="left"
+        android:id="@+id/speciesTextView"
+        android:text="Rock Kestrel"
+        android:textSize="20dp"
+        android:textColor="#FAFAFA"
+        android:textStyle="bold"
+        android:layout_marginLeft="18dp"
+        android:layout_marginBottom="236dp"/>
+
+    <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:id="@+id/GreyLocationIcon"
+        android:src="@drawable/grey_location_icon"
+        android:layout_gravity="start|center_vertical"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="-99dp"
+        />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/InnerCardView"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="48dp">
+        <ImageView
+            android:layout_width="360dp"
+            android:layout_height="180dp"
+            android:id="@+id/InnerBirdPic"
+            android:src="@drawable/placeholder1"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="0dp"
+            android:scaleType="fitXY"
+            />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:id="@+id/TextViewCoordinates"
+        android:text="22' 56; 20.30030 S, 40' 51; 320.44 E"
+        android:textSize="14dp"
+        android:textColor="#D4D4D4"
+        android:textStyle="bold"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="-197dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="left"
+        android:id="@+id/TextViewDescription"
+        android:text="Spotted this beautiful Rock Kestrel. Seen in January
+during my time at Walvis Bay, Namibia."
+        android:textSize="13dp"
+        android:textColor="#D4D4D4"
+        android:layout_marginLeft="19dp"
+        android:layout_marginTop="230dp"/>
+</androidx.cardview.widget.CardView>

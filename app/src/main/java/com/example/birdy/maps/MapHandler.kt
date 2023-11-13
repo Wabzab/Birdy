@@ -1,4 +1,4 @@
-package com.example.birdy
+package com.example.birdy.maps
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -6,6 +6,10 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.fragment.app.FragmentManager
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
+import com.example.birdy.R
+import com.example.birdy.observations.Sighting
+import com.example.birdy.observations.SightingDAO
+import com.example.birdy.utility.buildURLForHotspot
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
+import java.text.DateFormat
 import kotlin.concurrent.thread
 
 class MapHandler(activity: Activity, supportFragmentManager: FragmentManager): OnMapReadyCallback, OnMarkerClickListener {
@@ -47,7 +52,7 @@ class MapHandler(activity: Activity, supportFragmentManager: FragmentManager): O
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
     }
 
-    private fun loadHotspots() {
+    fun loadHotspots() {
         thread {
             val lat = sharedPrefs.getString(latKey, "0")
             val lng = sharedPrefs.getString(lngKey, "0")
@@ -83,9 +88,30 @@ class MapHandler(activity: Activity, supportFragmentManager: FragmentManager): O
                     .position(pos)
                     .title(hotspot.locName)
                     .snippet("Lat: $lat | Lng: $lng")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.BirdIcon))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.hotspot_icon))
                 )
             }
+        }
+    }
+
+    fun loadObservations() {
+        thread {
+            val sightingDAO = SightingDAO(activity)
+            val user = sharedPrefs.getString(activity.getString(R.string.saved_username_key), "") ?: ""
+            val sightings = sightingDAO.getSightings(user)
+            activity.runOnUiThread { createObservationMarkers(sightings) }
+        }
+    }
+
+    private fun createObservationMarkers(sightings: List<Sighting>) {
+        val df = DateFormat.getDateInstance()
+        for (s in sightings) {
+            map.addMarker(MarkerOptions()
+                .position(LatLng(s.lat, s.lng))
+                .title(s.species)
+                .snippet(df.format(s.date))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.observation_icon))
+            )
         }
     }
 
@@ -95,28 +121,48 @@ class MapHandler(activity: Activity, supportFragmentManager: FragmentManager): O
         }
     }
 
-    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        map.uiSettings.isMapToolbarEnabled = false
+        map.uiSettings.isZoomControlsEnabled = false
         map.setOnMarkerClickListener(this)
         map.mapType = GoogleMap.MAP_TYPE_TERRAIN
         loadHotspots()
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            userMarker = map.addMarker(MarkerOptions()
-                .position(LatLng(location.latitude, location.longitude))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.user_icon))
-            )
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), 10F))
-        }
+        addUserMarker()
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
         //map.clear()
         MapRouter.showDirection(
             map,
-            LatLng(sharedPrefs.getString(latKey, "0")!!.toDouble(), sharedPrefs.getString(lngKey, "0")!!.toDouble()),
+            LatLng(
+                sharedPrefs.getString(latKey, "0")!!.toDouble(),
+                sharedPrefs.getString(lngKey, "0")!!.toDouble()
+            ),
             marker.position
         )
         return false
+    }
+
+    fun clearMap() {
+        map.clear()
+        addUserMarker()
+    }
+
+    fun centerOnUser() {
+        if (userMarker != null) {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(userMarker!!.position, 10F))
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun addUserMarker() {
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            userMarker = map.addMarker(MarkerOptions()
+                .position(LatLng(location.latitude, location.longitude))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.user_icon))
+            )
+            centerOnUser()
+        }
     }
 }
