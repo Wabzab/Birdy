@@ -79,13 +79,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/usernameEditText"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="9dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="34dp"
-        android:layout_marginEnd="156dp"
+        android:layout_marginEnd="155dp"
         android:layout_toEndOf="@+id/passwordLabel"
         android:clickable="false"
+        android:focusable="true"
         android:text="Forgot?"
-        android:textColor="#FFA500"
         android:textSize="16sp" />
 
     <EditText
