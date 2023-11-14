@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Birdy" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Birdy.Light" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/yellow</item>
+        <item name="colorPrimary">@color/primary_light</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -14,8 +14,10 @@
         <!-- Customize your theme here. -->
         <item name="android:colorButtonNormal">@color/purple_200</item>
     </style>
-    <style name="Theme.Birdy.Button" parent="Widget.AppCompat.Button">
-        <item name="android:textSize">18sp</item>
+    <style name="Theme.Birdy.Light.Button" parent="Widget.AppCompat.Button">
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@color/secondaryLightPrimary</item>
         <item name="android:textColor">@color/black</item>
         <!-- <item name="android:background">@drawable/button_background</item>-->
     </style>

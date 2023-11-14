@@ -72,7 +72,7 @@
         android:text="Password"
         android:textColor="#FFFFFF"
         android:textSize="16sp" />
-
+<!--
     <TextView
         android:id="@+id/forgotText"
         android:layout_width="wrap_content"
@@ -86,7 +86,8 @@
         android:clickable="false"
         android:focusable="true"
         android:text="Forgot?"
-        android:textSize="16sp" />
+        android:textColor="@color/link_color"
+        android:textSize="16sp" /> -->
 
     <EditText
         android:id="@+id/passwordEditText"
@@ -135,12 +136,14 @@
     <Button
         android:id="@+id/btnSignUp"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:textSize="18sp"
+        android:background="@color/primary_dark"
         android:layout_centerHorizontal="true"
         android:clickable="true"
         android:layout_below="@+id/textView2"
         android:text="Sign up"
-        android:textColor="#A3A3A3"
+        android:textColor="@color/black"
         android:focusable="true" />
 
 </RelativeLayout>
