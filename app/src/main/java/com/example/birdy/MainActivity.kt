@@ -57,16 +57,29 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mapHandler: MapHandler
     private var isDarkTheme = true // Initial theme
 
-
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         // Set the theme based on the initial condition
-        setAppTheme(isDarkTheme)
+        sharedPref = getDefaultSharedPreferences(this)
+        with (sharedPref.all) {
+            if (this["theme"] == null) {
+                with (sharedPref.edit()) {
+                    putString("theme", "light")
+                    commit()
+                }
+            }
+
+            if (this["theme"] == "light") {
+                setTheme(R.style.Light)
+            } else if (this["theme"] == "night") {
+                setTheme(R.style.Night)
+            }
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         activity = this
-        sharedPref = getDefaultSharedPreferences(this)
+
         if (!sharedPref.contains(getString(R.string.saved_dist_key))) {
             with (sharedPref.edit()) {
                 putInt(getString(R.string.saved_dist_key), 5)
@@ -153,11 +166,20 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
         dialog.window?.setLayout(width, -2)
     }
-    private fun setAppTheme(isDarkTheme: Boolean) {
-        if (isDarkTheme) {
-            setTheme(R.style.Night)
-        } else {
-            setTheme(R.style.Light)
+
+    private fun swapTheme() {
+        with (sharedPref.all) {
+            if (this["theme"] == "light") {
+                with (sharedPref.edit()) {
+                    putString("theme", "night")
+                    commit()
+                }
+            } else {
+                with (sharedPref.edit()) {
+                    putString("theme", "light")
+                    commit()
+                }
+            }
         }
     }
 
@@ -213,10 +235,8 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 R.id.theme_switch -> {
-
-                    isDarkTheme = !isDarkTheme;
-                    recreate();
-
+                    swapTheme()
+                    recreate()
                 }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
