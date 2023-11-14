@@ -23,7 +23,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 import com.example.birdy.*
@@ -31,7 +30,6 @@ import com.example.birdy.accounts.LoginActivity
 import com.example.birdy.accounts.UserDAO
 import com.example.birdy.maps.MapHandler
 import com.example.birdy.notebook.Notebook
-import com.example.birdy.observations.SaveObservation
 import com.example.birdy.observations.ViewObservations
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
@@ -80,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 
         btnSaveObservation = findViewById(R.id.btnSaveObservation)
         btnSaveObservation.setOnClickListener {
-            val intent = Intent(this, SaveObservation::class.java)
+            val intent = Intent(this, ViewObservations::class.java)
             startActivity(intent)
         }
 

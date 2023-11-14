@@ -1,5 +1,6 @@
 package com.example.birdy.observations
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import com.example.birdy.R
 import java.text.DateFormat
 import java.util.*
 
-class ObservationAdapter(private val sightings: List<Sighting>): RecyclerView.Adapter<ObservationAdapter.ViewHolder>(), Filterable {
+class ObservationAdapter(private val sightings: MutableList<Sighting>): RecyclerView.Adapter<ObservationAdapter.ViewHolder>(), Filterable {
     private val completeSightings = sightings
     private var filteredSightings = sightings
 
@@ -70,7 +71,7 @@ class ObservationAdapter(private val sightings: List<Sighting>): RecyclerView.Ad
             }
 
             override fun publishResults(constraint: CharSequence, results: FilterResults) {
-                filteredSightings = results.values as List<Sighting>
+                filteredSightings = results.values as MutableList<Sighting>
                 notifyDataSetChanged()
             }
         }
