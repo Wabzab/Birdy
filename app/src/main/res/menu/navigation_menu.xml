@@ -21,8 +21,7 @@
         android:title="Logout" />
     <item
         android:id="@+id/theme_switch"
-        android:title="Night Mode"
-        />
+        android:title="Swap Themes" />
 
 
 
