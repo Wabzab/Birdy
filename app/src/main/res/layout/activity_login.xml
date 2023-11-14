@@ -107,18 +107,19 @@
 
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="275dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/passwordEditText"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="67dp"
         android:layout_marginTop="20dp"
+        android:layout_marginRight="67dp"
         android:paddingStart="20dp"
         android:paddingTop="10dp"
         android:paddingEnd="20dp"
         android:paddingBottom="10dp"
         android:text="Log In"
-        android:textAllCaps="false"
-        android:textSize="18sp" />
+        android:textAllCaps="false" />
 
     <TextView
         android:id="@+id/textView2"
@@ -133,15 +134,12 @@
 
     <Button
         android:id="@+id/btnSignUp"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:textSize="18sp"
-        android:background="@color/primary_dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:clickable="true"
         android:layout_below="@+id/textView2"
         android:text="Sign up"
-        android:textColor="@color/black"
         android:focusable="true" />
 
 </RelativeLayout>
