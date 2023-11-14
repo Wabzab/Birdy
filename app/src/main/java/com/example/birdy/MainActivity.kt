@@ -155,9 +155,9 @@ class MainActivity : AppCompatActivity() {
     }
     private fun setAppTheme(isDarkTheme: Boolean) {
         if (isDarkTheme) {
-            setTheme(R.style.Theme_Birdy_Night)
+            setTheme(R.style.Night)
         } else {
-            setTheme(R.style.Theme_Birdy_Light)
+            setTheme(R.style.Light)
         }
     }
 

@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
+    android:background="?attr/colorSecondary"
     tools:context=".observations.ViewObservations">
 
     <TextView
@@ -15,6 +16,7 @@
         android:layout_marginStart="16dp"
         android:fontFamily="monospace"
         android:text="View Observations"
+        android:textColor="?attr/colorSecondaryVariant"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/etSearchFilter"
         app:layout_constraintStart_toEndOf="@+id/ibtnViewReturn"
@@ -34,9 +36,12 @@
         android:id="@+id/etSearchFilter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorSecondaryVariant"
         android:ems="10"
         android:hint="Filter by name..."
         android:inputType="textPersonName"
+        android:textColor="?attr/colorSecondaryVariant"
+        android:textColorHint="?attr/colorSecondaryVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ibtnViewReturn" />
@@ -45,9 +50,10 @@
         android:id="@+id/rvObservations"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etSearchFilter"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+        >
 
     </androidx.recyclerview.widget.RecyclerView>
 

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorSecondary">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -24,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="Add Species"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorPrimary"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -32,9 +33,12 @@
             android:id="@+id/etFilter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="?attr/colorSecondaryVariant"
             android:hint="Filter..."
             android:importantForAutofill="no"
-            android:inputType="textFilter" />
+            android:inputType="textFilter"
+            android:textColor="?attr/colorSecondaryVariant"
+            android:textColorHint="?attr/colorSecondaryVariant" />
 
         <Spinner
             android:id="@+id/spnSpecies"
@@ -50,6 +54,7 @@
             android:layout_marginBottom="15dp"
             android:text="Bird Details"
             android:textAlignment="center"
+            android:textColor="?attr/colorSecondaryVariant"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -59,6 +64,7 @@
             android:layout_height="wrap_content"
             android:text="Common Name"
             android:textAllCaps="false"
+            android:textColor="?attr/colorSecondaryVariant"
             android:textSize="18sp" />
 
         <TextView
@@ -69,6 +75,7 @@
             android:layout_marginBottom="8dp"
             android:text="Common name"
             android:textAlignment="viewStart"
+            android:textColor="?attr/colorSecondaryVariant"
             android:textSize="16sp"
             android:textStyle="italic" />
 
@@ -78,6 +85,7 @@
             android:layout_height="wrap_content"
             android:text="Scientific Name"
             android:textAllCaps="false"
+            android:textColor="?attr/colorSecondaryVariant"
             android:textSize="18sp" />
 
         <TextView
@@ -88,6 +96,7 @@
             android:layout_marginBottom="8dp"
             android:text="Scientific name"
             android:textAlignment="viewStart"
+            android:textColor="?attr/colorSecondaryVariant"
             android:textSize="16sp"
             android:textStyle="italic" />
 
@@ -97,6 +106,7 @@
             android:layout_height="wrap_content"
             android:text="Family Common Name"
             android:textAllCaps="false"
+            android:textColor="?attr/colorSecondaryVariant"
             android:textSize="18sp" />
 
         <TextView
@@ -107,6 +117,7 @@
             android:layout_marginBottom="8dp"
             android:text="Family common name"
             android:textAlignment="viewStart"
+            android:textColor="?attr/colorSecondaryVariant"
             android:textSize="16sp"
             android:textStyle="italic" />
 
@@ -116,6 +127,7 @@
             android:layout_height="wrap_content"
             android:text="Family Scientific Name"
             android:textAllCaps="false"
+            android:textColor="?attr/colorSecondaryVariant"
             android:textSize="18sp" />
 
         <TextView
@@ -126,6 +138,7 @@
             android:layout_marginBottom="8dp"
             android:text="Family scientific name"
             android:textAlignment="viewStart"
+            android:textColor="?attr/colorSecondaryVariant"
             android:textSize="16sp"
             android:textStyle="italic" />
 
@@ -135,6 +148,7 @@
             android:layout_height="wrap_content"
             android:text="Order"
             android:textAllCaps="false"
+            android:textColor="?attr/colorSecondaryVariant"
             android:textSize="18sp" />
 
         <TextView
@@ -145,6 +159,7 @@
             android:layout_marginBottom="8dp"
             android:text="Order"
             android:textAlignment="viewStart"
+            android:textColor="?attr/colorSecondaryVariant"
             android:textSize="16sp"
             android:textStyle="italic" />
 
@@ -173,12 +188,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:focusable="true"
             android:text="Powered by eBird"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnSave"
             app:layout_constraintStart_toEndOf="@+id/btnCancel"
-            app:layout_constraintTop_toTopOf="parent"
-            android:focusable="true" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btnCancel"

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Species Name"
-            android:textColor="@color/black"
+            android:textColor="?attr/colorSecondaryVariant"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ibtnNoteSave"
