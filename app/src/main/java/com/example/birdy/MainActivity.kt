@@ -55,9 +55,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var activity: MainActivity
     private lateinit var mapHandler: MapHandler
+    private var isDarkTheme = true // Initial theme
+
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Set the theme based on the initial condition
+        setAppTheme(isDarkTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -149,6 +153,13 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
         dialog.window?.setLayout(width, -2)
     }
+    private fun setAppTheme(isDarkTheme: Boolean) {
+        if (isDarkTheme) {
+            setTheme(R.style.Theme_Birdy_Night)
+        } else {
+            setTheme(R.style.Theme_Birdy_Light)
+        }
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
@@ -200,6 +211,12 @@ class MainActivity : AppCompatActivity() {
                     val userDao = UserDAO(this)
                     userDao.logout()
                     startActivity(intent)
+                }
+                R.id.theme_switch -> {
+
+                    isDarkTheme = !isDarkTheme;
+                    recreate();
+
                 }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
@@ -261,5 +278,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
 
 }
