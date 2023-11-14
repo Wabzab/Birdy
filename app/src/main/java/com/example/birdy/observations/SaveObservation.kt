@@ -116,6 +116,6 @@ class SaveObservation : AppCompatActivity(), AdapterView.OnItemSelectedListener 
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("Not yet implemented")
+        return
     }
 }

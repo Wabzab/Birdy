@@ -28,7 +28,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 import com.example.birdy.*
 import com.example.birdy.accounts.LoginActivity
+import com.example.birdy.accounts.UserDAO
 import com.example.birdy.maps.MapHandler
+import com.example.birdy.notebook.Notebook
 import com.example.birdy.observations.SaveObservation
 import com.example.birdy.observations.ViewObservations
 import com.google.android.gms.location.*
@@ -100,7 +102,6 @@ class MainActivity : AppCompatActivity() {
         dialog.setContentView(R.layout.map_settings_dialog)
 
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
-        //val height = R.layout.map_settings_dialog.
 
         val etHotspotDists = dialog.findViewById<EditText>(R.id.etHotspotDistances)
         val cbShowHotspot = dialog.findViewById<CheckBox>(R.id.cbShowHotspots)
@@ -192,12 +193,14 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this, ViewObservations::class.java)
                     startActivity(intent)
                 }
-                R.id.nav_settings -> {
-                    val intent = Intent(this, Settings::class.java)
+                R.id.nav_notebook -> {
+                    val intent = Intent(this, Notebook::class.java)
                     startActivity(intent)
                 }
                 R.id.nav_logout -> {
                     val intent = Intent(this, LoginActivity::class.java)
+                    val userDao = UserDAO(this)
+                    userDao.logout()
                     startActivity(intent)
                 }
             }

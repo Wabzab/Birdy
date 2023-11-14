@@ -77,4 +77,12 @@ class UserDAO(activity: Activity) {
         Log.d("USER", "No user found!")
         return false
     }
+
+    fun logout(): Boolean {
+        with (sharedPreferences.edit()) {
+            putString(activity.getString(R.string.saved_username_key), "")
+            commit()
+        }
+        return true
+    }
 }
