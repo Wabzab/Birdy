@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class Note(
     @SerializedName("species") val species: Species,
-    @SerializedName("checked") val checked: Boolean
+    @SerializedName("checked") var checked: Boolean
 )

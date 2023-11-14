@@ -64,7 +64,23 @@ class NoteDao(activity: Activity) {
             return result.isSuccess
         }
         val updateTask = notesDoc.update("notes", FieldValue.arrayUnion(note))
-        val result = kotlin.runCatching { updateTask }
+        val result = kotlin.runCatching { Tasks.await(updateTask) }
+        return result.isSuccess
+    }
+
+    fun removeNote(user: String, note: Note): Boolean {
+        val notesDoc = db.collection("notes").document(user)
+        val deleteTask = notesDoc.update("notes", FieldValue.arrayRemove(note))
+        val result = kotlin.runCatching { Tasks.await(deleteTask) }
+        return result.isSuccess
+    }
+
+    fun checkNote(user: String, note: Note): Boolean {
+        val notesDoc = db.collection("notes").document(user)
+        removeNote(user, note)
+        note.checked = true
+        val checkTask = notesDoc.update("notes", FieldValue.arrayUnion(note))
+        val result = kotlin.runCatching { Tasks.await(checkTask) }
         return result.isSuccess
     }
 }

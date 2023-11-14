@@ -1,15 +1,20 @@
 package com.example.birdy.notebook
 
+import android.app.Activity
 import android.graphics.Paint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.birdy.R
+import com.example.birdy.observations.SightingDAO
+import kotlin.concurrent.thread
 
-class NotebookAdapter(private val notes: List<Note>): RecyclerView.Adapter<NotebookAdapter.ViewHolder>() {
+class NotebookAdapter(private var notes: MutableList<Note>, private val activity: Activity): RecyclerView.Adapter<NotebookAdapter.ViewHolder>() {
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val tvName: TextView
@@ -38,5 +43,28 @@ class NotebookAdapter(private val notes: List<Note>): RecyclerView.Adapter<Noteb
         if (note.checked) {
             holder.tvName.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
         }
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(activity)
+        val sightingDao = SightingDAO(activity)
+        val notesDao = NoteDao(activity)
+        val user = sharedPref.getString(activity.getString(R.string.saved_username_key), "") ?: ""
+        holder.btnSave.setOnClickListener {
+            thread {
+                sightingDao.saveSighting(note.species)
+                notesDao.checkNote(user, note)
+            }
+            holder.tvName.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+        }
+        holder.btnDelete.setOnClickListener {
+            thread {
+                notesDao.removeNote(user, note)
+            }
+            notes.removeAt(position)
+            notifyItemRemoved(position)
+        }
+    }
+
+    fun add(note: Note) {
+        notes.add(note)
+        notifyItemInserted(notes.size-1)
     }
 }

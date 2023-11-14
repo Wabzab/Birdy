@@ -3,6 +3,8 @@ package com.example.birdy.notebook
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.Window
@@ -20,6 +22,7 @@ class Notebook : AppCompatActivity() {
 
     lateinit var rvNotebook: RecyclerView
     lateinit var btnNoteAdd: ImageButton
+    lateinit var notesAdapter: NotebookAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +44,12 @@ class Notebook : AppCompatActivity() {
         val noteDao = NoteDao(this)
         thread {
             val notes = noteDao.fetchNotes(sharedPreferences.getString(getString(R.string.saved_username_key), "") ?: "")
-            runOnUiThread { populateNotes(notes.toList()) }
+            runOnUiThread { populateNotes(notes.toMutableList()) }
         }
     }
 
-    fun populateNotes(notes: List<Note>) {
-        val notesAdapter = NotebookAdapter(notes)
+    fun populateNotes(notes: MutableList<Note>) {
+        notesAdapter = NotebookAdapter(notes, this)
         rvNotebook.adapter = notesAdapter
     }
 
@@ -68,7 +71,7 @@ class Notebook : AppCompatActivity() {
         val tvFamSciName = dialog.findViewById<TextView>(R.id.tvFamSciName)
         val tvOrder = dialog.findViewById<TextView>(R.id.tvOrder)
 
-        var adapter: ArrayAdapter<Species>
+        lateinit var adapter: ArrayAdapter<Species>
         var selectedSpecies: Species? = null
 
         btnCancel.setOnClickListener {
@@ -80,15 +83,28 @@ class Notebook : AppCompatActivity() {
                 val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
                 val noteDao = NoteDao(this)
                 thread {
-                    val notes = noteDao.addNote(
-                        sharedPreferences.getString(
-                            getString(R.string.saved_username_key),
-                            ""
-                        ) ?: "", Note(selectedSpecies!!, false)
-                    )
-                    runOnUiThread { updateNotes() }
+                    val user = sharedPreferences.getString(getString(R.string.saved_username_key), "") ?: ""
+                    val note = Note(selectedSpecies!!, false)
+                    val result = noteDao.addNote(user, note)
+                    runOnUiThread {
+                        notesAdapter.add(note)
+                    }
                 }
                 dialog.dismiss()
+            }
+        }
+
+        val textWatcher = object : TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                return
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                adapter.filter.filter(s.toString())
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                return
             }
         }
 
@@ -125,6 +141,7 @@ class Notebook : AppCompatActivity() {
                 adapter.setDropDownViewResource(R.layout.species_item)
                 spnSpecies.adapter = adapter
                 spnSpecies.onItemSelectedListener = itemSelectedListener
+                etFilter.addTextChangedListener(textWatcher)
             }
         }
 
