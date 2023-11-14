@@ -72,22 +72,7 @@
         android:text="Password"
         android:textColor="#FFFFFF"
         android:textSize="16sp" />
-<!--
-    <TextView
-        android:id="@+id/forgotText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/usernameEditText"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="34dp"
-        android:layout_marginEnd="155dp"
-        android:layout_toEndOf="@+id/passwordLabel"
-        android:clickable="false"
-        android:focusable="true"
-        android:text="Forgot?"
-        android:textColor="@color/link_color"
-        android:textSize="16sp" /> -->
+
 
     <EditText
         android:id="@+id/passwordEditText"

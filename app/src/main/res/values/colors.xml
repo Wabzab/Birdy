@@ -15,4 +15,5 @@
     <color name="variant_light">#009688</color>
     <color name="secondaryLightPrimary">#00BCD4</color>
     <color name="secondaryLightVariant">#B2DFDB</color>
+    <color name="GreenBorder">#184d2a</color>
 </resources>
