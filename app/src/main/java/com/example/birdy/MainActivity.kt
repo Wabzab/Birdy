@@ -166,6 +166,7 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
         dialog.window?.setLayout(width, -2)
     }
+
     private fun swapTheme() {
         with (sharedPref.all) {
             if (this["theme"] == "light") {
