@@ -2,6 +2,8 @@ package com.example.birdy.utility
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
+import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Base64
@@ -9,15 +11,13 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.*
-import androidx.preference.PreferenceManager
+import androidx.core.content.ContextCompat.startActivity
 import com.example.birdy.R
-import com.example.birdy.notebook.Note
-import com.example.birdy.notebook.NoteDao
 import com.example.birdy.observations.Species
 import com.google.gson.Gson
-import java.lang.Exception
 import java.security.MessageDigest
 import kotlin.concurrent.thread
+
 
 object Utils {
 
@@ -52,6 +52,12 @@ object Utils {
         val tvFamComName = dialog.findViewById<TextView>(R.id.tvFamComName)
         val tvFamSciName = dialog.findViewById<TextView>(R.id.tvFamSciName)
         val tvOrder = dialog.findViewById<TextView>(R.id.tvOrder)
+        val tvEbirdLink = dialog.findViewById<TextView>(R.id.tvEbirdLink)
+
+        tvEbirdLink.setOnClickListener {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://ebird.org/home"))
+            startActivity(activity, browserIntent, null)
+        }
 
         lateinit var adapter: ArrayAdapter<Species>
         var selectedSpecies: Species? = null
